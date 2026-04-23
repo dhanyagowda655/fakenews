@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="max-w-md mx-auto py-40 px-6">
+    <div class="bg-slate-900/40 glass p-10 rounded-[2.5rem] shadow-2xl border border-white/5 backdrop-blur-3xl animate-fade-in">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-black mb-4 tracking-tighter">Welcome <span class="gradient-text">Back.</span></h1>
+            <p class="text-slate-400">Sign in to your account.</p>
+        </div>
+        
+        <form action="{{ url_for('auth.login') }}" method="POST" class="space-y-6">
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text group-focus-within:text-primary transition">Email Adress</span></label>
+                <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                    <i class="fa-solid fa-envelope text-slate-500 mr-4"></i>
+                    <input type="email" name="email" placeholder="name@company.com" class="bg-transparent w-full py-5 outline-none text-sm font-medium" required />
+                </div>
+            </div>
+            
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text group-focus-within:text-primary transition">Password</span></label>
+                <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                    <i class="fa-solid fa-lock text-slate-500 mr-4"></i>
+                    <input type="password" name="password" placeholder="••••••••" class="bg-transparent w-full py-5 outline-none text-sm font-medium" required />
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-semibold px-2">
+                <label class="cursor-pointer flex items-center gap-2">
+                    <input type="checkbox" class="checkbox checkbox-xs checkbox-primary rounded-md" />
+                    <span class="text-slate-400">Remember Me</span>
+                </label>
+                <a href="#" class="text-primary hover:underline">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block rounded-2xl py-8 neon-gradient border-none text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                Sign In
+            </button>
+        </form>
+
+        <div class="mt-10 text-center">
+            <p class="text-sm text-slate-500">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-white font-bold hover:underline ml-1">Create one</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

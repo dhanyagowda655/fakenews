@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!-- Hero Section -->
+<section class="mt-20 px-8 lg:px-32 text-center pb-40">
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-10 inline-flex items-center gap-2 px-6 py-2 rounded-full glass animate-float">
+            <i class="fa-solid fa-sparkles text-yellow-400"></i>
+            <span class="text-secondary text-sm font-bold">Powered by Groq - Llama 3.2 Vision</span>
+        </div>
+        <h1 class="text-6xl lg:text-8xl font-black mb-10 tracking-tight leading-tight">
+            Stop the <span class="gradient-text">Spread</span> of <br/> 
+            Fake News.
+        </h1>
+        <p class="text-lg lg:text-2xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Protect yourself from misinformation with our AI-powered verification engine. 
+            Real-time fact-checking for URLs, images, and videos.
+        </p>
+        <div class="flex flex-col md:row items-center justify-center gap-6">
+            <a href="{{ url_for('user.dashboard') }}" class="btn btn-primary btn-lg rounded-full px-12 neon-gradient border-none hover:shadow-primary/50 text-xl">
+                Get Started Free <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+            </a>
+            <a href="#features" class="btn btn-ghost btn-lg underline text-sm tracking-wide">Learn How It Works</a>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Preview Component (Glass Card) -->
+<section class="px-8 lg:px-20 -mt-20">
+    <div class="max-w-5xl mx-auto bg-slate-900/50 glass rounded-[3rem] p-10 lg:p-20 shadow-2xl relative overflow-hidden group">
+        <div class="absolute inset-0 bg-blue-600/10 blur-[100px] rounded-full group-hover:bg-blue-600/20 transition-all"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="text-4xl font-extrabold mb-8 leading-tight">Analyze Anything <br/> <span class="gradient-text">Seamlessly.</span></h2>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 bg-slate-800/80 p-5 rounded-3xl glass hover:scale-105 transition">
+                        <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-link text-2xl text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">URL Verification</h3>
+                            <p class="text-slate-400 text-sm">Paste any news link to verify its credibility.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-800/80 p-5 rounded-3xl glass hover:scale-105 transition">
+                        <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-image text-2xl text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Image Analysis</h3>
+                            <p class="text-slate-400 text-sm">Upload screenshots or memes for deep-fake detection.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-800/80 p-5 rounded-3xl glass hover:scale-105 transition">
+                        <div class="w-14 h-14 bg-pink-500/20 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-file-video text-2xl text-pink-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">Video Forensics</h3>
+                            <p class="text-slate-400 text-sm">AI-driven analysis for manipulated video clips.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="bg-slate-800/50 p-6 rounded-3xl glass border border-white/5 relative z-10">
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex items-center gap-2">
+                             <div class="w-10 h-10 bg-success rounded-full flex items-center justify-center text-slate-900">
+                                <i class="fa-solid fa-check"></i>
+                             </div>
+                             <span class="font-bold text-xl uppercase tracking-widest text-success">REAL News</span>
+                        </div>
+                        <div class="badge badge-success badge-lg glass text-xs font-bold px-4 py-3">Confidence: 98.4%</div>
+                    </div>
+                    <div class="w-full h-40 bg-slate-900/80 rounded-2xl mb-6 relative overflow-hidden flex items-center justify-center">
+                       <i class="fa-solid fa-chart-line text-6xl text-slate-700 opacity-20"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="h-4 bg-slate-700 w-3/4 rounded-full"></div>
+                        <div class="h-4 bg-slate-700 w-full rounded-full opacity-50"></div>
+                        <div class="h-4 bg-slate-700 w-1/2 rounded-full opacity-30"></div>
+                    </div>
+                </div>
+                <!-- Decorative absolute blobs -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features section -->
+<section id="features" class="py-40 px-8 lg:px-32">
+    <div class="text-center mb-24">
+        <h2 class="text-5xl font-black mb-6">Why Choose <span class="gradient-text">FakeCheck?</span></h2>
+        <p class="text-slate-400">Advanced features built for the next generation of web.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="p-10 rounded-[2.5rem] bg-slate-900/30 glass border border-white/5 hover:-translate-y-4 transition-all">
+            <i class="fa-solid fa-bolt text-4xl text-yellow-400 mb-8"></i>
+            <h3 class="text-2xl font-bold mb-4">Instant Results</h3>
+            <p class="text-slate-400 leading-relaxed">Our AI analyzes content in milliseconds, providing real-time feedback when it matters most.</p>
+        </div>
+        <div class="p-10 rounded-[2.5rem] bg-slate-900/30 glass border border-white/5 hover:-translate-y-4 transition-all">
+            <i class="fa-solid fa-brain text-4xl text-secondary mb-8"></i>
+            <h3 class="text-2xl font-bold mb-4">Groq Llama Hub</h3>
+            <p class="text-slate-400 leading-relaxed">We use Groq's Llama models to cross-reference and ensure over 95% accuracy.</p>
+        </div>
+        <div class="p-10 rounded-[2.5rem] bg-slate-900/30 glass border border-white/5 hover:-translate-y-4 transition-all">
+            <i class="fa-solid fa-shield-halved text-4xl text-primary mb-8"></i>
+            <h3 class="text-2xl font-bold mb-4">Privacy First</h3>
+            <p class="text-slate-400 leading-relaxed">Your data is encrypted and never stored beyond the analysis session without your consent.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

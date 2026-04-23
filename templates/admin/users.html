@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="max-w-7xl mx-auto py-12 px-8">
+    <div class="mb-14 flex flex-col md:row items-center justify-between gap-10">
+        <div>
+            <h1 class="text-5xl font-black mb-4 tracking-tighter">Manage <span class="gradient-text">Users.</span></h1>
+            <p class="text-slate-400 text-lg">System-wide user control and access management.</p>
+        </div>
+        <div class="badge badge-lg glass badge-primary py-6 px-10 font-black tracking-widest text-xs uppercase">{{ users|length }} TOTAL ACTIVE</div>
+    </div>
+
+    <div class="overflow-x-auto bg-slate-900/30 glass rounded-[3rem] border border-white/5 shadow-2xl p-6">
+        <table class="table table-lg w-full">
+            <thead class="text-slate-500 uppercase text-xs font-black tracking-widest border-b border-white/5">
+                <tr>
+                    <th class="py-10 pl-10">Identity</th>
+                    <th>Email / Phone</th>
+                    <th>Account Role</th>
+                    <th>Scan Limit</th>
+                    <th class="pr-10 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm font-medium">
+                {% for user in users %}
+                <tr class="hover:bg-white/5 transition group border-none">
+                    <td class="py-8 pl-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center font-black group-hover:bg-primary/20 transition">
+                                {{ user.name[:1].upper() }}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-200">{{ user.name }}</h4>
+                                <span class="text-[10px] text-slate-600 font-black uppercase tracking-widest">ID: #{{ user.id }}X2026</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="font-bold mb-1 opacity-90">{{ user.email }}</div>
+                        <p class="text-xs text-slate-500 font-bold tracking-widest">{{ user.phone or 'No phone' }}</p>
+                    </td>
+                    <td>
+                        <div class="badge badge-outline border-white/10 glass {{ 'shadow-lg shadow-secondary/20 text-secondary' if user.role == 'admin' else 'text-slate-500' }} font-black text-xs px-6 py-4 uppercase scale-90">
+                            {{ user.role }}
+                        </div>
+                    </td>
+                    <td>
+                         <div class="text-xs font-bold text-slate-600 mb-2">SCAN USAGE: {{ user.analyses|length }} / UNLIMITED</div>
+                         <div class="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width:{{ (user.analyses|length / 100 * 100)|round }}%"></div>
+                         </div>
+                    </td>
+                    <td class="pr-10 text-right">
+                        {% if user.role != 'admin' %}
+                        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST" class="inline" onsubmit="return confirm('Permanently remove this user?');">
+                            <button type="submit" class="btn btn-ghost btn-circle text-error hover:bg-error/10 transition">
+                                <i class="fa-solid fa-user-slash"></i>
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="text-xs font-black text-slate-600 uppercase tracking-widest mr-4">Protected System</span>
+                        {% endif %}
+                        <button class="btn btn-ghost btn-circle hover:bg-white/10"><i class="fa-solid fa-chevron-right text-slate-700"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

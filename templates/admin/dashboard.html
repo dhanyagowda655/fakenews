@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="max-w-7xl mx-auto py-12 px-8">
+    <div class="mb-14 flex flex-col md:row items-center justify-between gap-10">
+        <div>
+            <h1 class="text-5xl font-black mb-4 tracking-tighter">System <span class="gradient-text">Analytics.</span></h1>
+            <p class="text-slate-400 text-lg">Central hub for monitoring and managing the detection engine.</p>
+        </div>
+        
+        <div class="flex gap-4">
+             <form action="{{ url_for('admin.trigger_retrain') }}" method="POST">
+                <button type="submit" class="btn btn-primary btn-md rounded-full px-8 neon-gradient border-none hover:scale-105 transition shadow-lg shadow-primary/20">
+                    <i class="fa-solid fa-sync mr-2"></i> Trigger Retraining
+                </button>
+             </form>
+             <a href="{{ url_for('admin.manage_users') }}" class="btn btn-ghost btn-md rounded-full border border-white/10 hover:border-white/20 glass px-8">
+                <i class="fa-solid fa-users mr-2"></i> Manage Users
+             </a>
+        </div>
+    </div>
+
+    <!-- Key Metrics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-14">
+        <div class="bg-indigo-950/20 glass p-8 rounded-[2.5rem] border border-white/5 relative group overflow-hidden">
+             <i class="fa-solid fa-users absolute -right-4 -bottom-4 text-7xl text-white/5 group-hover:text-primary/10 transition rotate-12"></i>
+             <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Total Users</p>
+             <h4 class="text-4xl font-black">{{ users_count }}</h4>
+             <div class="mt-4 flex items-center gap-2 text-xs font-bold text-success">
+                 <i class="fa-solid fa-arrow-up"></i> +4.2% Growth
+             </div>
+        </div>
+        <div class="bg-slate-900/40 glass p-8 rounded-[2.5rem] border border-white/5 relative group overflow-hidden">
+             <i class="fa-solid fa-microchip absolute -right-4 -bottom-4 text-7xl text-white/5 group-hover:text-primary/10 transition rotate-12"></i>
+             <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Total Scans</p>
+             <h4 class="text-4xl font-black">{{ total_analyses }}</h4>
+             <div class="mt-4 flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                 <i class="fa-solid fa-clock"></i> Lifetime Logs
+             </div>
+        </div>
+        <div class="bg-indigo-950/20 glass p-8 rounded-[2.5rem] border border-white/5 relative group overflow-hidden">
+             <i class="fa-solid fa-brain absolute -right-4 -bottom-4 text-7xl text-white/5 group-hover:text-primary/10 transition rotate-12"></i>
+             <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Gemini API Usage</p>
+             <h4 class="text-4xl font-black">{{ api_usage }} <span class="text-sm font-bold opacity-40">Calls</span></h4>
+             <div class="mt-4 flex items-center gap-2 text-xs font-bold text-primary italic">
+                 <i class="fa-solid fa-bolt"></i> API Healthy (Active)
+             </div>
+        </div>
+        <div class="bg-red-950/20 glass p-8 rounded-[2.5rem] border border-red-500/10 relative group overflow-hidden">
+             <i class="fa-solid fa-shield-virus absolute -right-4 -bottom-4 text-7xl text-white/5 group-hover:text-error/10 transition rotate-12"></i>
+             <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 text-error">Fake Rate</p>
+             <h4 class="text-4xl font-black text-error">{{ (fake_count/total_analyses*100)|round if total_analyses > 0 else 0 }}%</h4>
+             <div class="mt-4 flex items-center gap-2 text-xs font-bold text-error">
+                 <i class="fa-solid fa-warning"></i> High Trend Alert
+             </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <!-- Distribution Chart -->
+        <div class="bg-slate-900/40 glass p-10 rounded-[3rem] border border-white/5 flex flex-col items-center">
+             <h3 class="text-2xl font-black mb-10 w-full text-center tracking-tight">Detection Distribution</h3>
+             <div class="relative w-72 h-72 mx-auto">
+                 <canvas id="distributionChart"></canvas>
+             </div>
+             <div class="mt-12 w-full grid grid-cols-2 gap-4">
+                 <div class="bg-green-600/10 p-4 rounded-2xl border border-green-500/10 text-center">
+                    <p class="text-xs font-black text-success uppercase mb-1">Authentic</p>
+                    <h5 class="text-xl font-black">{{ real_count }}</h5>
+                 </div>
+                 <div class="bg-red-600/10 p-4 rounded-2xl border border-red-500/10 text-center">
+                    <p class="text-xs font-black text-error uppercase mb-1">Misinformation</p>
+                    <h5 class="text-xl font-black">{{ fake_count }}</h5>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Viral Content Feed -->
+        <div class="bg-slate-900/40 glass p-10 rounded-[3rem] border border-white/5">
+             <h3 class="text-2xl font-black mb-10 tracking-tight">Most Viral Fake News Detected</h3>
+             <div class="space-y-6">
+                {% for item in viral_fakes %}
+                <div class="flex items-center gap-6 bg-slate-800/20 p-5 rounded-2xl group border border-white/5 hover:border-error/20 transition-all">
+                    <div class="w-14 h-14 bg-error/10 text-error rounded-xl flex flex-col items-center justify-center font-black">
+                        <span class="text-lg">{{ item.virality|round }}</span>
+                        <span class="text-[8px] uppercase">Score</span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <h4 class="text-sm font-bold truncate group-hover:text-error transition">{{ item.input_content }}</h4>
+                        <div class="flex gap-4 mt-1">
+                             <span class="text-[10px] font-black uppercase text-slate-500 tracking-widest"><i class="fa-solid fa-clock mr-1"></i> {{ item.timestamp.strftime('%H:%M Today') }}</span>
+                             <span class="text-[10px] font-black uppercase text-primary tracking-widest"><i class="fa-solid fa-location-dot mr-1"></i> Regional Trending</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-ghost btn-circle btn-sm hover:bg-error/10 transition opacity-0 group-hover:opacity-100"><i class="fa-solid fa-eye"></i></a>
+                </div>
+                {% else %}
+                <div class="text-center py-20">
+                     <p class="text-slate-600 text-sm font-bold italic">Gathering intelligence...</p>
+                </div>
+                {% endfor %}
+             </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const ctxDist = document.getElementById('distributionChart').getContext('2d');
+    new Chart(ctxDist, {
+        type: 'doughnut',
+        data: {
+            labels: ['Authentic', 'Misinformation'],
+            datasets: [{
+                data: [{{ real_count }}, {{ fake_count }}],
+                backgroundColor: ['#10b981', '#ef4444'],
+                hoverOffset: 15,
+                borderWidth: 0,
+                spacing: 10,
+                borderRadius: 15
+            }]
+        },
+        options: {
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
+            },
+            cutout: '80%'
+        }
+    });
+</script>
+{% endblock %}

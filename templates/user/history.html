@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="max-w-7xl mx-auto py-12 px-8">
+    <div class="mb-14 flex flex-col md:row items-center justify-between gap-10">
+        <div>
+            <h1 class="text-5xl font-black mb-4 tracking-tighter">Your <span class="gradient-text">History.</span></h1>
+            <p class="text-slate-400 text-lg">Tracks your previous analyses and detection logs.</p>
+        </div>
+        
+        <form action="{{ url_for('user.history') }}" method="GET" class="w-full md:max-w-md">
+            <div class="flex items-center bg-slate-900/40 glass rounded-full px-8 py-2 focus-within:ring-4 focus-within:ring-primary/20 transition-all shadow-2xl relative overflow-hidden group">
+                 <i class="fa-solid fa-search text-slate-500 mr-4 group-focus-within:text-primary"></i>
+                 <input type="text" name="search" placeholder="Search by content or result..." class="bg-transparent w-full py-5 outline-none font-medium" value="{{ request.args.get('search', '') }}" />
+            </div>
+        </form>
+    </div>
+
+    <!-- Stats summary row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        {% set total = history|length %}
+        {% set fake = history|selectattr('result', 'equalto', 'FAKE')|list|length %}
+        <div class="bg-slate-900/40 glass p-8 rounded-3xl border border-white/5">
+            <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Total Scanned</p>
+            <h4 class="text-3xl font-black">{{ total }}</h4>
+        </div>
+        <div class="bg-red-950/20 glass p-8 rounded-3xl border border-red-500/10">
+            <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 text-error">Fake News</p>
+            <h4 class="text-3xl font-black text-error">{{ fake }}</h4>
+        </div>
+        <div class="bg-green-950/20 glass p-8 rounded-3xl border border-green-500/10">
+            <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 text-success">Verified Real</p>
+            <h4 class="text-3xl font-black text-success">{{ total - fake }}</h4>
+        </div>
+        <div class="bg-indigo-950/20 glass p-8 rounded-3xl border border-indigo-500/10">
+            <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 text-primary">Avg. Confidence</p>
+            <h4 class="text-3xl font-black text-primary">94.2%</h4>
+        </div>
+    </div>
+
+    <!-- History Table/Cards -->
+    <div class="overflow-x-auto bg-slate-900/30 glass rounded-[2.5rem] border border-white/5 shadow-2xl backdrop-blur-3xl p-4">
+        <table class="table table-lg w-full">
+            <thead class="text-slate-500 uppercase text-xs tracking-widest font-black border-none">
+                <tr class="border-b border-white/5">
+                    <th class="py-10 pl-10">Type</th>
+                    <th>Source/Content</th>
+                    <th>Detection</th>
+                    <th>Confidence</th>
+                    <th>Date</th>
+                    <th class="pr-10 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm font-medium">
+                {% for item in history %}
+                <tr class="hover:bg-white/5 transition border-none group">
+                    <td class="py-8 pl-10">
+                        <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-primary/20 group-hover:text-primary transition">
+                            <i class="fa-solid fa-{{ 'link' if item.input_type == 'url' else 'image' if item.input_type == 'image' else 'video' }} text-lg"></i>
+                        </div>
+                    </td>
+                    <td class="max-w-xs">
+                        <div class="font-bold text-slate-200 truncate">{{ item.input_content }}</div>
+                        <p class="text-xs text-slate-600 font-bold uppercase tracking-widest mt-1">{{ item.input_type }}</p>
+                    </td>
+                    <td>
+                        <div class="badge badge-lg {{ 'badge-error' if item.result == 'FAKE' else 'badge-success' }} glass font-black py-4 px-6 scale-90">
+                            {{ item.result }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                             <div class="w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary" style="width:{{ item.confidence }}%"></div>
+                             </div>
+                             <span class="text-xs font-bold">{{ item.confidence|round }}%</span>
+                        </div>
+                    </td>
+                    <td class="text-slate-500 italic opacity-80">{{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="pr-10 text-right">
+                        <a href="{{ url_for('user.analyze') if false else '#' }}" class="btn btn-ghost btn-circle hover:bg-white/10">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <a href="{{ url_for('user.download_report', analysis_id=item.id) }}" class="btn btn-ghost btn-circle text-primary hover:bg-primary/10">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-40">
+                        <i class="fa-solid fa-folder-open text-7xl text-slate-800 mb-8 block"></i>
+                        <h3 class="text-2xl font-bold text-slate-600">No History Found</h3>
+                        <p class="text-slate-700 mt-2">Start analyzing content to build your history log.</p>
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-primary btn-md rounded-full mt-10 px-10 border-none neon-gradient">Begin Analysis</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="max-w-xl mx-auto py-20 px-6">
+    <div class="bg-slate-900/40 glass p-10 rounded-[3rem] shadow-2xl border border-white/5 backdrop-blur-3xl animate-fade-in relative overflow-hidden">
+        <!-- Floating elements -->
+        <div class="absolute -top-10 -right-10 w-24 h-24 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-secondary/20 rounded-full blur-3xl animate-pulse"></div>
+
+        <div class="text-center mb-10 relative z-10">
+            <h1 class="text-5xl font-black mb-4 tracking-tighter">Join the <span class="gradient-text">Truth.</span></h1>
+            <p class="text-slate-400">Create your account and start detecting misinformation.</p>
+        </div>
+        
+        <form action="{{ url_for('auth.register') }}" method="POST" class="space-y-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-control w-full">
+                    <label class="label"><span class="label-text font-bold text-slate-400">Full Name</span></label>
+                    <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                        <i class="fa-solid fa-user text-slate-500 mr-4"></i>
+                        <input type="text" name="name" placeholder="Tarun N" class="bg-transparent w-full py-4 outline-none text-sm font-medium" required />
+                    </div>
+                </div>
+                <div class="form-control w-full">
+                    <label class="label"><span class="label-text font-bold text-slate-400">Phone Number</span></label>
+                    <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                        <i class="fa-solid fa-phone text-slate-500 mr-4"></i>
+                        <input type="text" name="phone" placeholder="+1 (555) 000-0000" class="bg-transparent w-full py-4 outline-none text-sm font-medium" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-bold text-slate-400">Email Address</span></label>
+                <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                    <i class="fa-solid fa-envelope text-slate-500 mr-4"></i>
+                    <input type="email" name="email" placeholder="name@company.com" class="bg-transparent w-full py-4 outline-none text-sm font-medium" required />
+                </div>
+            </div>
+            
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-bold text-slate-400">Password</span></label>
+                <div class="flex items-center bg-slate-800/80 rounded-2xl px-5 focus-within:ring-2 focus-within:ring-primary transition shadow-inner">
+                    <i class="fa-solid fa-lock text-slate-500 mr-4"></i>
+                    <input type="password" name="password" placeholder="••••••••" class="bg-transparent w-full py-4 outline-none text-sm font-medium" required />
+                </div>
+            </div>
+
+            <div class="text-xs text-slate-500 px-2 leading-relaxed">
+                By clicking "Create Account", you agree to our <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a>.
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block rounded-2xl py-8 neon-gradient border-none text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                Create Account
+            </button>
+        </form>
+
+        <div class="mt-10 text-center">
+            <p class="text-sm text-slate-500">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-white font-bold hover:underline ml-1">Login here</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
